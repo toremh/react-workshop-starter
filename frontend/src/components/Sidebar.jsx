@@ -1,19 +1,27 @@
+import { useState } from "react";
 import ContactCard from "./ContactCard";
 import styles from "./Sidebar.module.css"
 export default function Sidebar({ contacts, onContactClicked }) {
+    const [search, setSearch] = useState("");
 
-    for (let i = 0; i < contacts.length; i++) {
+    function handleChange(e){
+        setSearch(e.target.value)
+    }
 
+    function searchFilter(contact){
+        const searchLower = search.toLowerCase();
+        const nameLower = contact.name.toLowerCase();
+        return nameLower.includes(searchLower);
     }
 
     return (
         <nav className={styles.sidebar}>
             <div className = {styles.corner}>
                 <h2>Friends</h2>
-                <input className = {styles.searchBar} type="text" />
+                <input className = {styles.searchBar} type="text" value ={search} onChange = {handleChange}/>
             </div>
             <div className ={styles.contactList}>
-                {contacts.map((contact) => (
+                {contacts.filter(searchFilter).map((contact) => (
                     // <p>{contact.name}</p>
                     <ContactCard key={contact._id} contact={contact}
                     onContactClicked={onContactClicked} />
