@@ -1,13 +1,22 @@
 import styles from "./App.module.css";
 import ContactDisplay from "./components/ContactDisplay";
-import { INITIAL_CONTACTS } from "./data/initial-contacts";
+// import { INITIAL_CONTACTS } from "./data/initial-contacts"; //now imported from backend local server
 import Sidebar from "./components/Sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function App() {
+  const [contacts, setContacts] = useState([]);
+  const [contact, setContact] = useState(null);
 
-    const [contact, setContact] = useState(INITIAL_CONTACTS[0]);
-  
+  async function fetchContacts(){
+    const response= await fetch("http://localhost:3000/api/contacts");
+    const newContacts = await response.json();
+    setContacts(newContacts);
+  }
+
+  useEffect(() => {
+    fetchContacts();
+}, []);
 
   function handleContactClicked(c) {
     // console.log("contact");
@@ -17,10 +26,10 @@ export default function App() {
   return (
     <>
       <div className={styles.container}>
-        <Sidebar contacts={INITIAL_CONTACTS} onContactClicked={handleContactClicked} />
+        <Sidebar contacts={contacts} onContactClicked={handleContactClicked} />
 
         {/* <h1>Hello, WDCC! 🐮💻</h1> */}
-        <ContactDisplay contact={contact} />
+        {contact != null ? <ContactDisplay contact={contact} /> : undefined}
       </div>
     </>
   );
