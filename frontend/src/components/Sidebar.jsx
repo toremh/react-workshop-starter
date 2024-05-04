@@ -1,6 +1,6 @@
 import ContactCard from "./ContactCard";
 import styles from "./Sidebar.module.css"
-export default function Sidebar({ contacts }) {
+export default function Sidebar({ contacts, onContactClicked }) {
 
     for (let i = 0; i < contacts.length; i++) {
 
@@ -15,7 +15,8 @@ export default function Sidebar({ contacts }) {
             <div className ={styles.contactList}>
                 {contacts.map((contact) => (
                     // <p>{contact.name}</p>
-                    <ContactCard contact={contact} />
+                    <ContactCard key={contact._id} contact={contact}
+                    onContactClicked={onContactClicked} />
                 ))}
             </div>
         </nav>
